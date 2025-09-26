@@ -1,0 +1,26 @@
+type Product {
+    id: ID!
+    title: String!
+    quantity: Int
+    description: String
+    price: Float
+    user: User
+    category: Category
+}
+
+type Query {
+    allProductsSortedByPrice: [Product]
+}
+
+type User {
+    id: ID!
+    fullName: String
+    email: String
+    username: String
+    phone: String
+}
+
+type Category {
+    id: ID!
+    name: String
+}
