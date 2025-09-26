@@ -1,35 +1,33 @@
 package com.example.demo.Entity;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
 import java.util.Set;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Table;
-
+import com.example.demo.Entity.UserEntity;
+import com.example.demo.Entity.ProductEntity;
 @Entity
-@Table(name = "category")
-@Data
+@Table(name = "categories")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CategoriesEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Only one column should be marked with this
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 200, nullable = false)
     private String name;
-
-    @Column(name = "images")
     private String images;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<UserEntity> users;
+    private Set<UserEntity> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<ProductEntity> products;
+    @ManyToMany
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<ProductEntity> products = new HashSet<>();
 }

@@ -6,45 +6,43 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import com.example.demo.Entity.UserEntity;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.example.demo.Entity.CategoriesEntity;
 @Entity
-@Table(name = "product")
+@Table(name = "products")
+@AllArgsConstructor
+@NoArgsConstructor
 @Data  // Lombok annotation to auto-generate getters, setters, equals, hashCode, and toString methods
 public class ProductEntity {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "title", nullable = false)
     private String title;
-
-    @Column(name = "quantity")
     private Integer quantity;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "price")
+    @Column(name = "description", length = 2000)
+    private String desc;
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @JoinColumn(name = "user_id")
+    private UserEntity owner;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private CategoriesEntity category; // Relationship with CategoriesEntity
-
-	public void setDesc(String desc) {
-		// TODO Auto-generated method stub
-		
-	}
+    @ManyToMany(mappedBy = "products")
+    private Set<CategoriesEntity> categories = new HashSet<>();
 
 
 }
